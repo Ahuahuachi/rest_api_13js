@@ -31,13 +31,18 @@ router.get("/", (request, response) => {
   }
 });
 
-router.get("/:id", (request, response) => {
-  const { id } = request.params;
-  response.json({
-    id,
-    name: "Product 1",
-    price: 1000,
-  });
+router.get("/:id", (request, response, next) => {
+  try {
+    throw "Error generico";
+    // const { id } = request.params;
+    // response.json({
+    //   id,
+    //   name: "Product 1",
+    //   price: 1000,
+    // });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", (request, response) => {
@@ -45,7 +50,7 @@ router.post("/", (request, response) => {
 
   // Logica del negocio
 
-  response.json({
+  response.status(201).json({
     ok: true,
     message: "Created successfully",
     payload: {
@@ -64,7 +69,7 @@ router.patch("/:id", (request, response) => {
       message: "Product not found",
     });
   } else {
-    response.json({
+    response.status(201).json({
       ok: true,
       message: `Product ${id} updated successfully`,
       payload: {
@@ -73,6 +78,15 @@ router.patch("/:id", (request, response) => {
       },
     });
   }
+});
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  // Logica para eliminar
+  res.status(202).json({
+    ok: true,
+    message: `Product ${id} deleted successfully`,
+  });
 });
 
 module.exports = router;
