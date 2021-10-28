@@ -6,11 +6,10 @@ const product = require("../usecases/products");
 const router = express.Router();
 
 router.get("/", async (request, response, next) => {
-  const products = [];
   const { limit } = request.query;
 
   try {
-    const products = await product.get();
+    const products = await product.get(limit);
     response.json({
       ok: true,
       message: "Done!",
@@ -55,34 +54,36 @@ router.post("/", async (request, response, next) => {
   }
 });
 
-router.patch("/:id", (request, response) => {
+router.patch("/:id", async (request, response, next) => {
   const { id } = request.params;
   const { name, price } = request.body;
 
-  if (id == 99) {
-    response.status(404).json({
-      ok: false,
-      message: "Product not found",
-    });
-  } else {
-    response.status(201).json({
+  try {
+    const productResponse = await product.update(id, { name, price });
+    response.json({
       ok: true,
-      message: `Product ${id} updated successfully`,
-      payload: {
-        name,
-        price,
-      },
+      message: "Product updated successfully",
+      payload: { productResponse },
     });
+  } catch (error) {
+    next(error);
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
-  // Logica para eliminar
-  res.status(202).json({
-    ok: true,
-    message: `Product ${id} deleted successfully`,
-  });
+  try {
+    const deletedProduct = await product.del(id);
+    res.json({
+      ok: true,
+      message: "Product deleted successfuly",
+      payload: {
+        product: deletedProduct,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

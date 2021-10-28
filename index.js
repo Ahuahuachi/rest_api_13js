@@ -12,6 +12,8 @@ app.get("/", (request, response) => {
   response.send("Hello World!");
 });
 
+app.use(authHandler);
+
 apiRouter(app);
 
 app.use(logErrors);

@@ -1,7 +1,7 @@
 const Product = require("../../models/products").model;
 
-const get = async () => {
-  const allProducts = await Product.find({}).exec();
+const get = async (limit) => {
+  const allProducts = await Product.find({}, null, { limit: limit }).exec();
   return allProducts;
 };
 
