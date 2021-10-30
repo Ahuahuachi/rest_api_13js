@@ -1,4 +1,5 @@
 const express = require("express");
+const users = require("../usecases/users");
 
 const router = express.Router();
 
@@ -27,6 +28,28 @@ router.get("/:id", (req, res) => {
     firstName: "Alfredo",
     lastName: "Altamirano",
   });
+});
+
+router.post("/", async (req, res, next) => {
+  try {
+    const { firstName, lastName, username, password, email } = req.body;
+
+    const createdUser = await users.create({
+      firstName,
+      lastName,
+      username,
+      password,
+      email,
+    });
+
+    res.status(201).json({
+      ok: true,
+      message: "User created successfully",
+      payload: createdUser,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

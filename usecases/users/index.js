@@ -1,33 +1,33 @@
 const User = require("../../models/users");
+const encrypt = require("../../lib/encrypt");
 
 const create = async (userData) => {
-    const { firstName, lastName, username, password, email } = userData
-    
-    /// tomar el password
-    // obtener el hash del password
-    // enviar al modelo el hash
+  const { firstName, lastName, username, password, email } = userData;
 
-  const user = new User({ firstName, lastName, username, hasheado, email });
+  const hash = await encrypt.hashPassword(password);
+
+  const user = new User.model({
+    firstName,
+    lastName,
+    username,
+    password: hash,
+    email,
+  });
   return await user.save();
 };
 
+const getByUsername = async (username) => {
+  return await User.model.findOne({ username }).exec();
+};
 
-const getJwt = () {
+const authenticate = async (user, password) => {
+  const hash = user.password;
 
-    // obtener los datos del usuario
-    // verificar que el usuario y contraseña sean validos
-    // Si son validos retornar un JWT
-        // el payload del JWT, debe contener el id del usuario, en el atributo sub:
+  return await encrypt.verifyPassword(password, hash);
+};
 
-}
-
-// POST /login
-/**
- * {
- *  username: "Alfabalt",
- *  password: "Pass123"
- * }
- */
-// POST /auth
-// POST /signin
-
+module.exports = {
+  create,
+  getByUsername,
+  authenticate,
+};
