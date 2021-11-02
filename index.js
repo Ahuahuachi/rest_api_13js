@@ -1,7 +1,8 @@
 const express = require("express");
+const config = require("./lib/config");
 const app = express();
-const port = 8000;
-const apiRouter = require("./routes");
+const port = config.app.port;
+const apiRouter = require("./routes/index.js");
 const { logErrors, errorHandler } = require("./middlewares/errorHandlers");
 const authHandler = require("./middlewares/authHandlers");
 const db = require("./lib/db");
