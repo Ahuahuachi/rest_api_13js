@@ -1,13 +1,15 @@
 const logErrors = (err, req, res, next) => {
-  console.log("Se ejecuto logErrors");
-  console.error(err);
+  console.error(err.message, err);
   next(err);
 };
 
 const errorHandler = (err, req, res, next) => {
-  res.status(500).json({
-    err,
-  });
+  jsonResponse = {
+    ok: false,
+    message: err.message,
+  };
+
+  res.status(500).json(jsonResponse);
 };
 
 module.exports = { logErrors, errorHandler };
