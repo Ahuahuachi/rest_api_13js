@@ -1,7 +1,10 @@
 const Product = require("../../models/products").model;
 
 const get = async (limit) => {
-  const allProducts = await Product.find({}, null, { limit: limit }).exec();
+  if (limit) {
+    limit = parseInt(limit);
+  }
+  const allProducts = await Product.find({}, null, { limit }).exec();
   return allProducts;
 };
 
@@ -17,14 +20,20 @@ const create = async (productData) => {
   return savedProduct;
 };
 
-const del = (productId) => {
-  return Product.findByIdAndDelete(productId).exec();
+const del = async (productId) => {
+  return await Product.findByIdAndDelete(productId).exec();
 };
 
-const update = (productId, productData) => {
+const update = async (productId, productData) => {
   const { name, price } = productData;
-
-  return Product.findByIdAndUpdate(productId, { name, price }).exec();
+  return await Product.findByIdAndUpdate(
+    productId,
+    {
+      name,
+      price,
+    },
+    { new: true }
+  ).exec();
 };
 
 module.exports = {
