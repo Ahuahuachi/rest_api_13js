@@ -32,7 +32,7 @@ router.get("/:id", (req, res) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { firstName, lastName, username, password, email } = req.body;
+    const { firstName, lastName, username, password, email, role } = req.body;
 
     const createdUser = await users.create({
       firstName,
@@ -40,6 +40,7 @@ router.post("/", async (req, res, next) => {
       username,
       password,
       email,
+      role,
     });
 
     res.status(201).json({

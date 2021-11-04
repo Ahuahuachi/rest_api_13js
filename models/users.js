@@ -35,6 +35,11 @@ const schema = new Schema({
     required: true,
     minlength: 1,
   },
+  role: {
+    type: String,
+    required: false,
+    minlength: 1,
+  },
 });
 
 module.exports = {

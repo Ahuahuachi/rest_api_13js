@@ -2,7 +2,7 @@ const User = require("../../models/users");
 const encrypt = require("../../lib/encrypt");
 
 const create = async (userData) => {
-  const { firstName, lastName, username, password, email } = userData;
+  const { firstName, lastName, username, password, email, role } = userData;
 
   const hash = await encrypt.hashPassword(password);
 
@@ -12,6 +12,7 @@ const create = async (userData) => {
     username,
     password: hash,
     email,
+    role,
   });
   return await user.save();
 };
