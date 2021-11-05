@@ -49,7 +49,7 @@ const update = async (id, data) => {
 };
 
 const getByUsername = async (username) => {
-  return await User.model.findOne({ username }).exec();
+  return await User.findOne({ username }).exec();
 };
 
 const authenticate = async (user, password) => {
@@ -61,6 +61,7 @@ const authenticate = async (user, password) => {
 module.exports = {
   get,
   getById,
+  del,
   update,
   create,
   getByUsername,
