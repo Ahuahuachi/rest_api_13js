@@ -1,7 +1,4 @@
-const jwt = require("../lib/jwt");
-
 const adminHandler = async (req, res, next) => {
-  console.log(req.params);
   try {
     const { role } = req.params.tokenPayload;
 
