@@ -26,15 +26,26 @@ router.get(
   }
 );
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  res.status(200).json({
-    id,
-    username: "alfredoa",
-    firstName: "Alfredo",
-    lastName: "Altamirano",
-  });
-});
+router.get(
+  "/:id",
+  authHandler,
+  permissionHandlers.sameUserHandler,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const payload = await users.getById(id);
+
+      res.status(200).json({
+        ok: true,
+        message: "Done!",
+        payload,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 router.post("/", async (req, res, next) => {
   try {

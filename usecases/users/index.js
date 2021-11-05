@@ -9,7 +9,10 @@ const get = async (limit) => {
 };
 
 const getById = async (id) => {
-  return await User.findById(id).exec();
+  return await User.findById(
+    id,
+    "firstName lastName username email role"
+  ).exec();
 };
 
 const create = async (userData) => {

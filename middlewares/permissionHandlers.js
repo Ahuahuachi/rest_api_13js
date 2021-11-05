@@ -39,7 +39,25 @@ const isStaff = (role) => {
   return role === "staff" || isAdmin(role);
 };
 
+const sameUserHandler = async (req, res, next) => {
+  try {
+    const { sub } = req.params.tokenPayload;
+    const { id } = req.params;
+    if (sub != id) {
+      res.json({
+        ok: false,
+        message: "You are not authorized",
+      });
+    } else {
+      next();
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   adminHandler,
   staffHandler,
+  sameUserHandler,
 };
