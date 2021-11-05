@@ -70,4 +70,30 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.patch(
+  "/:id",
+  authHandler,
+  permissionHandlers.sameUserHandler,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { firstName, lastName, password, email } = req.body;
+      const payload = await users.update(id, {
+        firstName,
+        lastName,
+        password,
+        email,
+      });
+
+      res.status(200).json({
+        ok: true,
+        message: "User updated successfully",
+        payload,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 module.exports = router;

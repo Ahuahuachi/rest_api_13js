@@ -39,23 +39,13 @@ const del = async (id) => {
 };
 
 const update = async (id, data) => {
-  const { firstName, lastName, password, email, role } = data;
-
-  if (password) {
-    const hash = await encrypt.hashPassword(password);
+  if (data.password) {
+    data.password = await encrypt.hashPassword(data.password);
   }
 
-  return await User.findByIdAndUpdate(
-    id,
-    {
-      firstName,
-      lastName,
-      password: hash,
-      email,
-      role,
-    },
-    { new: true }
-  ).exec();
+  const { _id } = await User.findByIdAndUpdate(id, data, { new: true }).exec();
+
+  return User.findById({ _id }, "firsName lastName username email role");
 };
 
 const getByUsername = async (username) => {
@@ -69,6 +59,9 @@ const authenticate = async (user, password) => {
 };
 
 module.exports = {
+  get,
+  getById,
+  update,
   create,
   getByUsername,
   authenticate,
