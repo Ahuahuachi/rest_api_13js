@@ -51,7 +51,7 @@ router.post("/", async (req, res, next) => {
   try {
     const { firstName, lastName, username, password, email, role } = req.body;
 
-    const createdUser = await users.create({
+    const payload = await users.create({
       firstName,
       lastName,
       username,
@@ -63,7 +63,7 @@ router.post("/", async (req, res, next) => {
     res.status(201).json({
       ok: true,
       message: "User created successfully",
-      payload: createdUser,
+      payload,
     });
   } catch (err) {
     next(err);

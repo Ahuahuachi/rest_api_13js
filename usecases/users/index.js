@@ -20,7 +20,7 @@ const create = async (userData) => {
 
   const hash = await encrypt.hashPassword(password);
 
-  const user = new User.model({
+  const user = new User({
     firstName,
     lastName,
     username,
@@ -28,7 +28,34 @@ const create = async (userData) => {
     email,
     role,
   });
-  return await user.save();
+
+  const { _id } = await user.save();
+
+  return User.findById({ _id }, "firsName lastName username email role");
+};
+
+const del = async (id) => {
+  return await User.findByIdAndDelete(id).exec();
+};
+
+const update = async (id, data) => {
+  const { firstName, lastName, password, email, role } = data;
+
+  if (password) {
+    const hash = await encrypt.hashPassword(password);
+  }
+
+  return await User.findByIdAndUpdate(
+    id,
+    {
+      firstName,
+      lastName,
+      password: hash,
+      email,
+      role,
+    },
+    { new: true }
+  ).exec();
 };
 
 const getByUsername = async (username) => {
