@@ -1,5 +1,16 @@
-const User = require("../../models/users");
+const User = require("../../models/users").model;
 const encrypt = require("../../lib/encrypt");
+
+const get = async (limit) => {
+  if (limit) {
+    limit = parseInt(limit);
+  }
+  return await User.find({}, null, { limit }).exec();
+};
+
+const getById = async (id) => {
+  return await User.findById(id).exec();
+};
 
 const create = async (userData) => {
   const { firstName, lastName, username, password, email, role } = userData;

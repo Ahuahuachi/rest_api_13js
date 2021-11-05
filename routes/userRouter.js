@@ -1,24 +1,30 @@
 const express = require("express");
+const { authHandler } = require("../middlewares/authHandlers");
+const permissionHandlers = require("../middlewares/permissionHandlers");
 const users = require("../usecases/users");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json([
-    {
-      id: 1,
-      username: "alfredoa",
-      firstName: "Alfredo",
-      lastName: "Altamirano",
-    },
-    {
-      id: 2,
-      username: "clauro",
-      firstName: "Claudia",
-      lastName: "Rodrigez",
-    },
-  ]);
-});
+router.get(
+  "/",
+  authHandler,
+  permissionHandlers.adminHandler,
+  async (req, res, next) => {
+    try {
+      const { limit } = req.query;
+
+      const payload = await users.get(limit);
+
+      res.status(200).json({
+        ok: true,
+        message: "Done!",
+        payload,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 router.get("/:id", (req, res) => {
   const { id } = req.params;
